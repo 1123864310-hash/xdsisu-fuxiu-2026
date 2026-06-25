@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>2026年校内辅修专业招生工作汇报</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Noto Sans SC', sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --ikb: #002FA7; --ikb-light: #E8EDF8; --ikb-mid: #4A6FD0; }
+
+        html, body { 
+            width: 100%; height: 100%; overflow: hidden; 
+            background: #f5f5f5; 
+        }
+
+        .slide-container {
+            width: 100vw; height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+        }
+
+        .slide {
+            width: 1280px; height: 720px;
+            background: white;
+            position: absolute;
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);
+            overflow: hidden;
+            display: flex; flex-direction: column;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: all;
+            z-index: 10;
+        }
+
+        .slide.prev {
+            opacity: 0;
+            transform: translateX(-100px);
+        }
+
+        @media (max-width: 1300px) {
+            .slide { transform: scale(0.95); }
+            .slide.active { transform: scale(0.95) translateX(0); }
+        }
+        @media (max-width: 1200px) {
+            .slide { transform: scale(0.88); }
+            .slide.active { transform: scale(0.88) translateX(0); }
+        }
+        @media (max-width: 1100px) {
+            .slide { transform: scale(0.8); }
+            .slide.active { transform: scale(0.8) translateX(0); }
+        }
+        @media (max-width: 1000px) {
+            .slide { transform: scale(0.7); }
+            .slide.active { transform: scale(0.7) translateX(0); }
+        }
+
+        .gradient-hero { background: linear-gradient(135deg, var(--ikb) 0%, #1a4fd0 50%, #002FA7 100%); }
+        .bg-ikb { background-color: var(--ikb); }
+        .text-ikb { color: var(--ikb); }
+        .border-ikb { border-color: var(--ikb); }
+        .bg-ikb-light { background-color: var(--ikb-light); }
+
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-3px); box-shadow: 0 10px 30px -8px rgba(0, 47, 167, 0.2); }
+
+        .pulse-dot { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .5; transform: scale(1.3); } }
+
+        .fade-in-up { animation: fadeInUp 0.8s ease-out forwards; opacity: 0; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+
+        .nav-dots {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 10px; z-index: 100;
+            background: rgba(255,255,255,0.9); padding: 8px 16px; border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .nav-dot {
+            width: 10px; height: 10px; border-radius: 50%; background: #ddd;
+            cursor: pointer; transition: all 0.3s;
+        }
+        .nav-dot.active { background: var(--ikb); width: 30px; border-radius: 5px; }
+
+        .page-indicator {
+            position: fixed; top: 20px; right: 30px;
+            background: rgba(0,0,0,0.7); color: white;
+            padding: 6px 14px; border-radius: 20px; font-size: 14px; z-index: 100;
+        }
+
+        .arrow-hint {
+            position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+            color: #999; font-size: 13px; z-index: 100;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-5px); } }
+
+        .timeline-line {
+            position: absolute; top: 50%; left: 0; right: 0; height: 4px;
+            background: linear-gradient(to right, var(--ikb), #4A6FD0);
+            transform: translateY(-50%); z-index: 0;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 47, 167, 0.1);
+        }
+
+        .number-big {
+            font-size: 80px; font-weight: 900; line-height: 1;
+            background: linear-gradient(135deg, var(--ikb), #1a4fd0);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .tag-pill {
+            background: linear-gradient(135deg, var(--ikb), var(--ikb-mid));
+            color: white; padding: 4px 14px; border-radius: 20px;
+            font-size: 13px; font-weight: 500; display: inline-block;
+        }
+
+        .warning-box {
+            background: #FFF8E6; border-left: 4px solid #F59E0B;
+            padding: 12px 16px; border-radius: 0 8px 8px 0;
+        }
+
+        .info-box {
+            background: var(--ikb-light); border-left: 4px solid var(--ikb);
+            padding: 12px 16px; border-radius: 0 8px 8px 0;
+        }
+
+        .slide-content { flex: 1; overflow: hidden; padding: 40px 60px; }
+        .slide-header { padding: 30px 60px 0; }
+
+        .text-title { font-size: 36px; font-weight: 900; }
+        .text-subtitle { font-size: 20px; font-weight: 700; }
+        .text-body { font-size: 16px; line-height: 1.6; }
+        .text-small { font-size: 14px; line-height: 1.5; }
+        .text-num { font-size: 56px; font-weight: 900; }
+        .text-num-lg { font-size: 120px; font-weight: 900; line-height: 1; }
+    </style>
+<base target="_blank">
+</head>
+<body>
+
+<div class="page-indicator"><span id="currentPage">1</span> / 8</div>
+
+<div class="slide-container">
+
+<!-- ========== SLIDE 1: 封面 ========== -->
+<div class="slide active" data-index="0">
+    <div class="gradient-hero h-full w-full flex">
+        <!-- 左侧 -->
+        <div class="w-[45%] h-full flex flex-col justify-center px-16 relative">
+            <div class="absolute top-0 left-0 w-full h-full opacity-10">
+                <div class="absolute top-20 left-10 w-64 h-64 bg-white rounded-full blur-3xl"></div>
+                <div class="absolute bottom-20 right-0 w-80 h-80 bg-blue-300 rounded-full blur-3xl"></div>
+            </div>
+            <div class="relative z-10">
+                <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-8">
+                    <span class="w-2.5 h-2.5 bg-green-400 rounded-full pulse-dot"></span>
+                    <span class="text-white text-sm font-medium">2026年度招生工作</span>
+                </div>
+                <h1 class="text-white text-[52px] font-black leading-[1.15] mb-6">
+                    2026年校内<br>辅修专业招生
+                </h1>
+                <p class="text-blue-200 text-lg leading-relaxed mb-10">
+                    面向学有余力的2025级学生<br>开设日语、法语两个辅修专业
+                </p>
+                <div class="flex gap-4">
+                    <div class="bg-white/15 backdrop-blur-sm rounded-xl px-5 py-3 text-center">
+                        <div class="text-white text-3xl font-black">2</div>
+                        <div class="text-blue-200 text-sm">招生专业</div>
+                    </div>
+                    <div class="bg-white/15 backdrop-blur-sm rounded-xl px-5 py-3 text-center">
+                        <div class="text-white text-3xl font-black">32</div>
+                        <div class="text-blue-200 text-sm">总学分</div>
+                    </div>
+                    <div class="bg-white/15 backdrop-blur-sm rounded-xl px-5 py-3 text-center">
+                        <div class="text-white text-3xl font-black">4</div>
+                        <div class="text-blue-200 text-sm">学期周期</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 右侧信息卡 -->
+        <div class="w-[55%] h-full flex items-center justify-center px-12">
+            <div class="glass-card rounded-2xl p-10 w-full max-w-[520px] shadow-2xl">
+                <div class="flex items-center gap-3 mb-8">
+                    <div class="w-10 h-10 bg-ikb rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    </div>
+                    <div>
+                        <div class="font-bold text-lg text-gray-900">文件信息</div>
+                        <div class="text-sm text-gray-500">贤达教通〔2026〕82号</div>
+                    </div>
+                </div>
+                <div class="space-y-3 mb-8">
+                    <div class="flex justify-between p-3 bg-gray-50 rounded-lg">
+                        <span class="text-gray-500 text-sm">发布单位</span>
+                        <span class="font-medium text-sm text-gray-900">教务处</span>
+                    </div>
+                    <div class="flex justify-between p-3 bg-gray-50 rounded-lg">
+                        <span class="text-gray-500 text-sm">发布日期</span>
+                        <span class="font-medium text-sm text-gray-900">2026年6月25日</span>
+                    </div>
+                    <div class="flex justify-between p-3 bg-gray-50 rounded-lg">
+                        <span class="text-gray-500 text-sm">报名截止</span>
+                        <span class="font-bold text-sm text-ikb">7月6日 12:00</span>
+                    </div>
+                    <div class="flex justify-between p-3 bg-ikb-light rounded-lg border border-ikb/20">
+                        <span class="text-ikb text-sm font-medium">距截止还剩</span>
+                        <span class="font-black text-ikb text-lg" id="countdown">计算中...</span>
+                    </div>
+                </div>
+                <div class="pt-6 border-t border-gray-100">
+                    <div class="text-xs text-gray-400 mb-2">汇报对象</div>
+                    <span class="tag-pill">各学院院领导</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========== SLIDE 2: 招生目的 ========== -->
+<div class="slide" data-index="1">
+    <div class="slide-header">
+        <div class="flex items-center gap-3 mb-2">
+            <div class="w-3 h-8 bg-ikb rounded-full"></div>
+            <div>
+                <div class="text-ikb text-sm font-bold">招生背景</div>
+                <h2 class="text-title text-gray-900">招生目的与人才培养定位</h2>
+            </div>
+        </div>
+    </div>
+    <div class="slide-content flex flex-col gap-6">
+        <!-- 核心宗旨 -->
+        <div class="bg-ikb-light rounded-xl p-6 border border-ikb/10 flex items-start gap-4 fade-in-up">
+            <div class="w-12 h-12 bg-ikb rounded-xl flex items-center justify-center flex-shrink-0">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+            <div>
+                <div class="font-bold text-lg text-gray-900 mb-2">核心宗旨</div>
+                <p class="text-body text-gray-600">为丰富学生的业余生活，提高学生的社会适应能力，使部分学有余力的学生掌握更多的科学文化知识，成为<span class="text-ikb font-bold">基础扎实、全面发展的高素质人才</span>。</p>
+            </div>
+        </div>
+        <!-- 4项目标 -->
+        <div class="grid grid-cols-4 gap-5 flex-1">
+            <div class="card-hover bg-white rounded-xl p-5 border border-gray-100 shadow-sm flex flex-col items-center text-center fade-in-up delay-1">
+                <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-ikb rounded-xl flex items-center justify-center mb-3 text-white text-2xl font-black">01</div>
+                <h3 class="font-bold text-base mb-2 text-gray-900">丰富业余生活</h3>
+                <p class="text-small text-gray-500">拓展学生课余时间的学习维度</p>
+            </div>
+            <div class="card-hover bg-white rounded-xl p-5 border border-gray-100 shadow-sm flex flex-col items-center text-center fade-in-up delay-2">
+                <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-ikb rounded-xl flex items-center justify-center mb-3 text-white text-2xl font-black">02</div>
+                <h3 class="font-bold text-base mb-2 text-gray-900">提高适应能力</h3>
+                <p class="text-small text-gray-500">增强社会竞争力与就业优势</p>
+            </div>
+            <div class="card-hover bg-white rounded-xl p-5 border border-gray-100 shadow-sm flex flex-col items-center text-center fade-in-up delay-3">
+                <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-ikb rounded-xl flex items-center justify-center mb-3 text-white text-2xl font-black">03</div>
+                <h3 class="font-bold text-base mb-2 text-gray-900">拓展知识储备</h3>
+                <p class="text-small text-gray-500">掌握更多科学文化知识</p>
+            </div>
+            <div class="card-hover bg-white rounded-xl p-5 border border-gray-100 shadow-sm flex flex-col items-center text-center fade-in-up delay-4">
+                <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-ikb rounded-xl flex items-center justify-center mb-3 text-white text-2xl font-black">04</div>
+                <h3 class="font-bold text-base mb-2 text-gray-900">培养高素质人才</h3>
+                <p class="text-small text-gray-500">打造全面发展的人才</p>
+            </div>
+        </div>
+        <!-- 底部数据条 -->
+        <div class="bg-ikb rounded-xl p-4 text-white text-center fade-in-up delay-5">
+            <span class="text-sm">核心定位：面向学有余力学生的人才培养补充机制，共计 </span>
+            <span class="font-bold text-lg">4</span>
+            <span class="text-sm"> 项核心目标</span>
+        </div>
+    </div>
+</div>
+
+<!-- ========== SLIDE 3: 招生对象 ========== -->
+<div class="slide" data-index="2">
+    <div class="slide-header">
+        <div class="flex items-center gap-3 mb-2">
+            <div class="w-3 h-8 bg-ikb rounded-full"></div>
+            <div>
+                <div class="text-ikb text-sm font-bold">准入门槛</div>
+                <h2 class="text-title text-gray-900">招生对象与筛选条件</h2>
+            </div>
+        </div>
+        <p class="text-gray-500 text-sm ml-6">五项条件须同时满足，缺一不可</p>
+    </div>
+    <div class="slide-content flex flex-col gap-5">
+        <!-- 筛选流程 -->
+        <div class="flex items-center justify-center gap-2 fade-in-up">
+            <div class="bg-white rounded-lg px-4 py-2 shadow-sm border border-gray-200 text-center">
+                <div class="text-xs text-gray-400">条件一</div>
+                <div class="font-bold text-ikb text-sm">2025级</div>
+            </div>
+            <svg class="w-5 h-5 text-ikb" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            <div class="bg-white rounded-lg px-4 py-2 shadow-sm border border-gray-200 text-center">
+                <div class="text-xs text-gray-400">条件二</div>
+                <div class="font-bold text-ikb text-sm">崇明校区</div>
+            </div>
+            <svg class="w-5 h-5 text-ikb" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            <div class="bg-white rounded-lg px-4 py-2 shadow-sm border border-gray-200 text-center">
+                <div class="text-xs text-gray-400">条件三</div>
+                <div class="font-bold text-ikb text-sm">学有余力</div>
+            </div>
+            <svg class="w-5 h-5 text-ikb" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            <div class="bg-white rounded-lg px-4 py-2 shadow-sm border border-gray-200 text-center">
+                <div class="text-xs text-gray-400">条件四</div>
+                <div class="font-bold text-ikb text-sm">绩点≥2.0</div>
+            </div>
+            <svg class="w-5 h-5 text-ikb" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            <div class="bg-ikb rounded-lg px-4 py-2 shadow-lg text-center">
+                <div class="text-xs text-blue-200">条件五</div>
+                <div class="font-bold text-white text-sm">四年制本科</div>
+            </div>
+        </div>
+        <!-- 5个条件卡片 -->
+        <div class="grid grid-cols-5 gap-4 flex-1">
+            <div class="card-hover bg-white rounded-xl p-5 border border-gray-200 flex flex-col items-center text-center fade-in-up delay-1">
+                <div class="w-12 h-12 bg-ikb-light rounded-lg flex items-center justify-center mb-3">
+                    <svg class="w-6 h-6 text-ikb" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                </div>
+                <div class="text-num text-ikb mb-1">2025</div>
+                <div class="text-sm text-gray-500 font-medium">仅限2025级</div>
+                <div class="text-xs text-gray-400 mt-1">在读学生</div>
+            </div>
+            <div class="card-hover bg-white rounded-xl p-5 border border-gray-200 flex flex-col items-center text-center fade-in-up delay-2">
+                <div class="w-12 h-12 bg-ikb-light rounded-lg flex items-center justify-center mb-3">
+                    <svg class="w-6 h-6 text-ikb" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                </div>
+                <div class="text-num text-ikb mb-1">崇明</div>
+                <div class="text-sm text-gray-500 font-medium">崇明校区</div>
+                <div class="text-xs text-gray-400 mt-1">已注册在读</div>
+            </div>
+            <div class="card-hover bg-white rounded-xl p-5 border border-gray-200 flex flex-col items-center text-center fade-in-up delay-3">
+                <div class="w-12 h-12 bg-ikb-light rounded-lg flex items-center justify-center mb-3">
+                    <svg class="w-6 h-6 text-ikb" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <div class="text-num text-ikb mb-1">合格</div>
+                <div class="text-sm text-gray-500 font-medium">学有余力</div>
+                <div class="text-xs text-gray-400 mt-1">无不及格课程</div>
+            </div>
+            <div class="card-hover bg-white rounded-xl p-5 border border-gray-200 flex flex-col items-center text-center fade-in-up delay-4">
+                <div class="w-12 h-12 bg-ikb-light rounded-lg flex items-center justify-center mb-3">
+                    <svg class="w-6 h-6 text-ikb" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
+                </div>
+                <div class="text-num text-ikb mb-1">≥2.0</div>
+                <div class="text-sm text-gray-500 font-medium">平均绩点</div>
+                <div class="text-xs text-gray-400 mt-1">2.0及以上</div>
+            </div>
+            <div class="card-hover bg-white rounded-xl p-5 border border-gray-200 flex flex-col items-center text-center fade-in-up delay-5">
+                <div class="w-12 h-12 bg-ikb-light rounded-lg flex items-center justify-center mb-3">
+                    <svg class="w-6 h-6 text-ikb" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                </div>
+                <div class="text-num text-ikb mb-1">4年</div>
+                <div class="text-sm text-gray-500 font-medium">四年制本科</div>
+                <div class="text-xs text-gray-400 mt-1">限于修读年限</div>
+            </div>
+        </div>
+        <!-- 警告 -->
+        <div class="warning-box fade-in-up delay-5">
+            <div class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-amber-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                <span class="text-amber-800 text-sm font-bold">重要提示：</span>
+                <span class="text-amber-700 text-sm">仅限四年制本科学生，专升本及五年制学生不在本次招生范围内。</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========== SLIDE 4: 招生计划 ========== -->
+<div class="slide" data-index="3">
+    <div class="slide-header">
+        <div class="flex items-center gap-3 mb-2">
+            <div class="w-3 h-8 bg-ikb rounded-full"></div>
+            <div>
+                <div class="text-ikb text-sm font-bold">专业设置</div>
+                <h2 class="text-title text-gray-900">招生计划与专业配置</h2>
+            </div>
+        </div>
+    </div>
+    <div class="slide-content flex flex-col gap-5">
+        <!-- 3大数据看板 -->
+        <div class="grid grid-cols-3 gap-5">
+            <div class="bg-gradient-to-br from-ikb to-blue-600 rounded-xl p-6 text-white text-center fade-in-up">
+                <div class="text-num-lg mb-2">2</div>
+                <div class="text-blue-200 text-sm">招生专业（个）</div>
+            </div>
+            <div class="bg-white border-2 border-ikb rounded-xl p-6 text-center fade-in-up delay-1">
+                <div class="text-num-lg text-ikb mb-2">32</div>
+                <div class="text-gray-500 text-sm">总学分</div>
+            </div>
+            <div class="bg-white border-2 border-ikb rounded-xl p-6 text-center fade-in-up delay-2">
+                <div class="text-num-lg text-ikb mb-2">4</div>
+                <div class="text-gray-500 text-sm">培养学期</div>
+            </div>
+        </div>
+        <!-- 2专业卡片 -->
+        <div class="grid grid-cols-2 gap-5 flex-1">
+            <div class="card-hover bg-white rounded-xl border border-gray-200 overflow-hidden flex flex-col fade-in-up delay-2">
+                <div class="h-2 bg-gradient-to-r from-red-500 to-red-400"></div>
+                <div class="p-5 flex-1 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-14 h-14 bg-red-50 rounded-xl flex items-center justify-center">
+                            <span class="text-2xl font-black text-red-500">日</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-black text-gray-900">日语</h3>
+                            <span class="text-xs text-gray-400">Japanese</span>
+                        </div>
+                    </div>
+                    <div class="space-y-2 flex-1">
+                        <div class="flex items-center gap-2 text-sm">
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span class="text-gray-600">培养周期：<span class="font-bold text-gray-900">共开课四学期</span></span>
+                        </div>
+                        <div class="flex items-center gap-2 text-sm">
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+                            <span class="text-gray-600">上课地点：<span class="font-bold text-gray-900">崇明校区</span></span>
+                        </div>
+                        <div class="flex items-center gap-2 text-sm">
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707"></path></svg>
+                            <span class="text-gray-600">上课时间：<span class="font-bold text-gray-900">晚上及周末</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-hover bg-white rounded-xl border border-gray-200 overflow-hidden flex flex-col fade-in-up delay-3">
+                <div class="h-2 bg-gradient-to-r from-blue-500 to-blue-400"></div>
+                <div class="p-5 flex-1 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center">
+                            <span class="text-2xl font-black text-blue-500">法</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-black text-gray-900">法语</h3>
+                            <span class="text-xs text-gray-400">French</span>
+                        </div>
+                    </div>
+                    <div class="space-y-2 flex-1">
+                        <div class="flex items-center gap-2 text-sm">
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span class="text-gray-600">培养周期：<span class="font-bold text-gray-900">共开课四学期</span></span>
+                        </div>
+                        <div class="flex items-center gap-2 text-sm">
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+                            <span class="text-gray-600">上课地点：<span class="font-bold text-gray-900">崇明校区</span></span>
+                        </div>
+                        <div class="flex items-center gap-2 text-sm">
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707"></path></svg>
+                            <span class="text-gray-600">上课时间：<span class="font-bold text-gray-900">晚上及周末</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 补充信息 -->
+        <div class="bg-ikb-light rounded-xl p-4 border border-ikb/20 fade-in-up delay-4">
+            <div class="flex items-center gap-2 mb-3">
+                <svg class="w-4 h-4 text-ikb" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span class="font-bold text-ikb text-sm">补充信息（内部参考）</span>
+            </div>
+            <div class="grid grid-cols-3 gap-3">
+                <div class="bg-white rounded-lg p-3 flex items-center gap-3">
+                    <div class="w-8 h-8 bg-ikb rounded flex items-center justify-center text-white font-bold text-xs">人</div>
+                    <div>
+                        <div class="text-xs text-gray-400">招生总人数上限</div>
+                        <div class="font-bold text-sm text-gray-900">不超过10人</div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg p-3 flex items-center gap-3">
+                    <div class="w-8 h-8 bg-ikb rounded flex items-center justify-center text-white font-bold text-xs">费</div>
+                    <div>
+                        <div class="text-xs text-gray-400">学费标准</div>
+                        <div class="font-bold text-sm text-gray-900">5,000元/年</div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg p-3 flex items-center gap-3">
+                    <div class="w-8 h-8 bg-ikb rounded flex items-center justify-center text-white font-bold text-xs">课</div>
+                    <div>
+                        <div class="text-xs text-gray-400">课程安排</div>
+                        <div class="font-bold text-sm text-gray-900">1周/2节次</div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-2 text-xs text-gray-400">注：以上补充信息为内部参考数据，具体以教务处最终通知为准。</div>
+        </div>
+        <!-- 缺失标注 -->
+        <div class="warning-box fade-in-up delay-5">
+            <span class="text-amber-800 text-sm font-bold">素材未提及：</span>
+            <span class="text-amber-700 text-sm">各专业具体招生人数分配</span>
+        </div>
+    </div>
+</div>
+
+<!-- ========== SLIDE 5: 时间安排 ========== -->
+<div class="slide" data-index="4">
+    <div class="slide-header">
+        <div class="flex items-center gap-3 mb-2">
+            <div class="w-3 h-8 bg-ikb rounded-full"></div>
+            <div>
+                <div class="text-ikb text-sm font-bold">时间节点</div>
+                <h2 class="text-title text-gray-900">报名与开课时间安排</h2>
+            </div>
+        </div>
+    </div>
+    <div class="slide-content flex flex-col gap-6">
+        <!-- 时间轴 -->
+        <div class="relative flex-1 flex items-center fade-in-up">
+            <!-- 主线 -->
+            <div class="absolute top-1/2 left-[5%] right-[5%] h-1.5 timeline-line rounded-full transform -translate-y-1/2"></div>
+            <!-- 4个节点 -->
+            <div class="grid grid-cols-4 gap-4 w-full relative z-10">
+                <!-- 节点1 -->
+                <div class="flex flex-col items-center">
+                    <div class="w-6 h-6 bg-ikb rounded-full border-4 border-white shadow-lg mb-3"></div>
+                    <div class="bg-white rounded-xl p-4 border border-gray-200 shadow-sm w-full text-center">
+                        <div class="text-ikb text-sm font-bold mb-1">6月29日</div>
+                        <div class="text-3xl font-black text-gray-900 mb-1">8:00</div>
+                        <div class="font-bold text-gray-800 text-sm mb-1">报名开始</div>
+                        <div class="text-xs text-gray-500">学生可登录系统<br>提交申请</div>
+                    </div>
+                </div>
+                <!-- 节点2 -->
+                <div class="flex flex-col items-center">
+                    <div class="w-6 h-6 bg-red-500 rounded-full border-4 border-white shadow-lg mb-3"></div>
+                    <div class="bg-white rounded-xl p-4 border-2 border-red-200 shadow-sm w-full text-center">
+                        <div class="text-red-500 text-sm font-bold mb-1">7月6日</div>
+                        <div class="text-3xl font-black text-gray-900 mb-1">12:00</div>
+                        <div class="font-bold text-gray-800 text-sm mb-1">报名截止</div>
+                        <div class="text-xs text-red-500 font-medium">⚠ 逾期不予受理</div>
+                    </div>
+                </div>
+                <!-- 节点3 -->
+                <div class="flex flex-col items-center">
+                    <div class="w-6 h-6 bg-ikb rounded-full border-4 border-white shadow-lg mb-3"></div>
+                    <div class="bg-white rounded-xl p-4 border border-gray-200 shadow-sm w-full text-center">
+                        <div class="text-ikb text-sm font-bold mb-1">7月中旬</div>
+                        <div class="text-3xl font-black text-gray-900 mb-1">—</div>
+                        <div class="font-bold text-gray-800 text-sm mb-1">结果公布</div>
+                        <div class="text-xs text-gray-500">教务处确定开课<br>专业并通知学生</div>
+                    </div>
+                </div>
+                <!-- 节点4 -->
+                <div class="flex flex-col items-center">
+                    <div class="w-6 h-6 bg-green-500 rounded-full border-4 border-white shadow-lg mb-3"></div>
+                    <div class="bg-white rounded-xl p-4 border border-gray-200 shadow-sm w-full text-center">
+                        <div class="text-green-600 text-sm font-bold mb-1">秋季学期</div>
+                        <div class="text-3xl font-black text-gray-900 mb-1">—</div>
+                        <div class="font-bold text-gray-800 text-sm mb-1">正式开课</div>
+                        <div class="text-xs text-gray-500">利用晚上及周末<br>时间授课</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 底部统计 -->
+        <div class="grid grid-cols-2 gap-5">
+            <div class="bg-ikb rounded-xl p-6 text-white text-center fade-in-up delay-3">
+                <div class="text-5xl font-black mb-2">8天</div>
+                <div class="text-blue-200 text-sm">报名开放总时长</div>
+                <div class="text-blue-300 text-xs mt-1">6月29日8:00 至 7月6日12:00</div>
+            </div>
+            <div class="bg-white border-2 border-gray-200 rounded-xl p-6 fade-in-up delay-4">
+                <div class="flex items-center gap-2 mb-3">
+                    <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    <div class="font-bold text-gray-900">重要提醒</div>
+                </div>
+                <p class="text-gray-600 text-sm leading-relaxed">请各学院务必提醒学生把握时间节点，逾期不予受理。教务处将根据报名情况确定开课专业，并向报名成功学生发放通知。</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========== SLIDE 6: 报名流程 ========== -->
+<div class="slide" data-index="5">
+    <div class="slide-header">
+        <div class="flex items-center gap-3 mb-2">
+            <div class="w-3 h-8 bg-ikb rounded-full"></div>
+            <div>
+                <div class="text-ikb text-sm font-bold">操作指引</div>
+                <h2 class="text-title text-gray-900">报名方式与操作流程</h2>
+            </div>
+        </div>
+        <p class="text-gray-500 text-sm ml-6">政策依据：《上海外国语大学贤达经济人文学院辅修制暂行条例》</p>
+    </div>
+    <div class="slide-content flex flex-col gap-6">
+        <!-- 5步流程 -->
+        <div class="grid grid-cols-5 gap-3 flex-1">
+            <div class="relative fade-in-up">
+                <div class="bg-ikb text-white rounded-t-lg px-3 py-2 text-center text-xs font-bold">Step 1</div>
+                <div class="bg-white border border-gray-200 rounded-b-lg p-4 text-center h-[calc(100%-32px)] flex flex-col items-center justify-center card-hover">
+                    <div class="w-12 h-12 bg-ikb-light rounded-xl flex items-center justify-center mb-3">
+                        <svg class="w-6 h-6 text-ikb" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
+                    </div>
+                    <div class="font-bold text-gray-900 text-sm mb-1">登录系统</div>
+                    <div class="text-xs text-gray-500">访问教务管理系统<br>树维学生端</div>
+                </div>
+                <div class="absolute -right-1.5 top-1/2 transform -translate-y-1/2 z-10">
+                    <svg class="w-3 h-3 text-ikb" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                </div>
+            </div>
+            <div class="relative fade-in-up delay-1">
+                <div class="bg-ikb text-white rounded-t-lg px-3 py-2 text-center text-xs font-bold">Step 2</div>
+                <div class="bg-white border border-gray-200 rounded-b-lg p-4 text-center h-[calc(100%-32px)] flex flex-col items-center justify-center card-hover">
+                    <div class="w-12 h-12 bg-ikb-light rounded-xl flex items-center justify-center mb-3">
+                        <svg class="w-6 h-6 text-ikb" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"></path></svg>
+                    </div>
+                    <div class="font-bold text-gray-900 text-sm mb-1">进入学籍</div>
+                    <div class="text-xs text-gray-500">点击顶部导航栏<br>"学籍"模块</div>
+                </div>
+                <div class="absolute -right-1.5 top-1/2 transform -translate-y-1/2 z-10">
+                    <svg class="w-3 h-3 text-ikb" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                </div>
+            </div>
+            <div class="relative fade-in-up delay-2">
+                <div class="bg-ikb text-white rounded-t-lg px-3 py-2 text-center text-xs font-bold">Step 3</div>
+                <div class="bg-white border border-gray-200 rounded-b-lg p-4 text-center h-[calc(100%-32px)] flex flex-col items-center justify-center card-hover">
+                    <div class="w-12 h-12 bg-ikb-light rounded-xl flex items-center justify-center mb-3">
+                        <svg class="w-6 h-6 text-ikb" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                    </div>
+                    <div class="font-bold text-gray-900 text-sm mb-1">辅修申请</div>
+                    <div class="text-xs text-gray-500">选择"辅修申请"<br>进入报名入口</div>
+                </div>
+                <div class="absolute -right-1.5 top-1/2 transform -translate-y-1/2 z-10">
+                    <svg class="w-3 h-3 text-ikb" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                </div>
+            </div>
+            <div class="relative fade-in-up delay-3">
+                <div class="bg-ikb text-white rounded-t-lg px-3 py-2 text-center text-xs font-bold">Step 4</div>
+                <div class="bg-white border border-gray-200 rounded-b-lg p-4 text-center h-[calc(100%-32px)] flex flex-col items-center justify-center card-hover">
+                    <div class="w-12 h-12 bg-ikb-light rounded-xl flex items-center justify-center mb-3">
+                        <svg class="w-6 h-6 text-ikb" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
+                    </div>
+                    <div class="font-bold text-gray-900 text-sm mb-1">进入报名</div>
+                    <div class="text-xs text-gray-500">点击"进入n=6<br>辅修报名"</div>
+                </div>
+                <div class="absolute -right-1.5 top-1/2 transform -translate-y-1/2 z-10">
+                    <svg class="w-3 h-3 text-ikb" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                </div>
+            </div>
+            <div class="fade-in-up delay-4">
+                <div class="bg-green-600 text-white rounded-t-lg px-3 py-2 text-center text-xs font-bold">Step 5</div>
+                <div class="bg-white border-2 border-green-200 rounded-b-lg p-4 text-center h-[calc(100%-32px)] flex flex-col items-center justify-center card-hover">
+                    <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center mb-3">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <div class="font-bold text-gray-900 text-sm mb-1">确认报名</div>
+                    <div class="text-xs text-gray-500">选择拟报名专业<br>点击"报名"按键</div>
+                </div>
+            </div>
+        </div>
+        <!-- 底部信息 -->
+        <div class="grid grid-cols-2 gap-4">
+            <div class="bg-gray-900 rounded-xl p-4 fade-in-up delay-5">
+                <div class="flex items-center gap-2 mb-2">
+                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                    <span class="text-white text-sm font-bold">系统登录地址</span>
+                </div>
+                <div class="bg-gray-800 rounded p-2 font-mono text-xs text-green-400 break-all">
+                    https://jwglxt.xdsisu.edu.cn/student/login
+                </div>
+            </div>
+            <div class="bg-ikb-light rounded-xl p-4 border border-ikb/20 fade-in-up delay-5">
+                <div class="flex items-center gap-2 mb-2">
+                    <svg class="w-4 h-4 text-ikb" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                    <span class="text-ikb text-sm font-bold">报名结果查询</span>
+                </div>
+                <p class="text-gray-700 text-sm">报名成功后，可在<span class="font-bold text-ikb">"我的报名"</span>中查看报名结果</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========== SLIDE 7: 注意事项 ========== -->
+<div class="slide" data-index="6">
+    <div class="slide-header">
+        <div class="flex items-center gap-3 mb-2">
+            <div class="w-3 h-8 bg-red-500 rounded-full"></div>
+            <div>
+                <div class="text-red-500 text-sm font-bold">风险提示</div>
+                <h2 class="text-title text-gray-900">注意事项与关键门槛</h2>
+            </div>
+        </div>
+    </div>
+    <div class="slide-content flex flex-col gap-5">
+        <!-- 30人大数字 -->
+        <div class="bg-gradient-to-r from-ikb to-blue-600 rounded-2xl p-8 text-white text-center relative overflow-hidden fade-in-up">
+            <div class="absolute inset-0 opacity-10">
+                <div class="absolute top-0 left-10 w-48 h-48 bg-white rounded-full blur-3xl"></div>
+                <div class="absolute bottom-0 right-10 w-48 h-48 bg-blue-300 rounded-full blur-3xl"></div>
+            </div>
+            <div class="relative z-10">
+                <div class="text-[100px] font-black leading-none mb-2">30</div>
+                <div class="text-xl font-bold mb-1">最低开班人数门槛</div>
+                <div class="text-blue-200 text-sm">校内辅修专业人数低于30人时不开班</div>
+            </div>
+        </div>
+        <!-- 3个注意事项 -->
+        <div class="grid grid-cols-3 gap-4 flex-1">
+            <div class="card-hover bg-white rounded-xl p-5 border-l-4 border-ikb shadow-sm flex flex-col fade-in-up delay-1">
+                <div class="flex items-center gap-2 mb-3">
+                    <div class="w-8 h-8 bg-ikb-light rounded-lg flex items-center justify-center">
+                        <svg class="w-4 h-4 text-ikb" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
+                    </div>
+                    <h3 class="font-bold text-base">调整机制</h3>
+                </div>
+                <p class="text-gray-600 text-sm leading-relaxed flex-1">报名人数不足开班的专业，教务处后续将进行调整专业征询，请同学们关注后续通知。</p>
+            </div>
+            <div class="card-hover bg-white rounded-xl p-5 border-l-4 border-orange-400 shadow-sm flex flex-col fade-in-up delay-2">
+                <div class="flex items-center gap-2 mb-3">
+                    <div class="w-8 h-8 bg-orange-50 rounded-lg flex items-center justify-center">
+                        <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h3 class="font-bold text-base">上课安排</h3>
+                </div>
+                <p class="text-gray-600 text-sm leading-relaxed flex-1">校内辅修课程在崇明校区开课，利用晚上及周末时间，请学生合理安排主修与辅修课程时间。</p>
+            </div>
+            <div class="card-hover bg-white rounded-xl p-5 border-l-4 border-green-500 shadow-sm flex flex-col fade-in-up delay-3">
+                <div class="flex items-center gap-2 mb-3">
+                    <div class="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
+                        <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h3 class="font-bold text-base">信息关注</h3>
+                </div>
+                <p class="text-gray-600 text-sm leading-relaxed flex-1">请各学院及时转发教务处通知，确保学生获取最新招生动态与调整信息。</p>
+            </div>
+        </div>
+        <!-- 风险矩阵 -->
+        <div class="bg-white rounded-xl border border-gray-200 p-5 fade-in-up delay-4">
+            <h3 class="font-bold text-base text-gray-900 mb-3 flex items-center gap-2">
+                <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                风险预判与应对建议
+            </h3>
+            <div class="grid grid-cols-3 gap-3">
+                <div class="bg-red-50 rounded-lg p-3 border border-red-100">
+                    <div class="text-red-600 font-bold mb-1 text-xs">⚠ 风险点</div>
+                    <p class="text-gray-700 text-xs">若报名人数不足30人，该专业将无法开班，影响学生规划</p>
+                </div>
+                <div class="bg-blue-50 rounded-lg p-3 border border-blue-100">
+                    <div class="text-ikb font-bold mb-1 text-xs">💡 应对建议</div>
+                    <p class="text-gray-700 text-xs">各学院提前摸排学生意向，做好专业调剂预案与沟通解释工作</p>
+                </div>
+                <div class="bg-green-50 rounded-lg p-3 border border-green-100">
+                    <div class="text-green-600 font-bold mb-1 text-xs">✓ 关键动作</div>
+                    <p class="text-gray-700 text-xs">报名期间每日关注系统数据，及时向教务处反馈异常情况</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========== SLIDE 8: 工作建议 ========== -->
+<div class="slide" data-index="7">
+    <div class="slide-header">
+        <div class="flex items-center gap-3 mb-2">
+            <div class="w-3 h-8 bg-purple-500 rounded-full"></div>
+            <div>
+                <div class="text-purple-500 text-sm font-bold">执行建议</div>
+                <h2 class="text-title text-gray-900">各学院工作推进建议</h2>
+            </div>
+        </div>
+        <p class="text-gray-500 text-sm ml-6">注：本页内容为基于招生工作逻辑的合理推理扩写，供各学院参考执行</p>
+    </div>
+    <div class="slide-content flex flex-col gap-5">
+        <!-- 3阶段卡片 -->
+        <div class="grid grid-cols-3 gap-5 flex-1">
+            <div class="card-hover bg-white rounded-xl border-t-4 border-ikb shadow-sm flex flex-col fade-in-up">
+                <div class="p-5 flex-1 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 bg-ikb rounded-xl flex items-center justify-center text-white font-bold text-lg">01</div>
+                        <div>
+                            <h3 class="font-bold text-base">宣传动员</h3>
+                            <div class="text-xs text-gray-400">6月25日-6月28日</div>
+                        </div>
+                    </div>
+                    <ul class="space-y-2 text-sm text-gray-600 flex-1">
+                        <li class="flex items-start gap-2"><span class="text-ikb mt-1">●</span>召开年级会议或班会</li>
+                        <li class="flex items-start gap-2"><span class="text-ikb mt-1">●</span>解读辅修政策与优势</li>
+                        <li class="flex items-start gap-2"><span class="text-ikb mt-1">●</span>摸排学生报名意向</li>
+                        <li class="flex items-start gap-2"><span class="text-ikb mt-1">●</span>重点动员绩点≥2.0学生</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card-hover bg-white rounded-xl border-t-4 border-blue-500 shadow-sm flex flex-col fade-in-up delay-1">
+                <div class="p-5 flex-1 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center text-white font-bold text-lg">02</div>
+                        <div>
+                            <h3 class="font-bold text-base">报名协助</h3>
+                            <div class="text-xs text-gray-400">6月29日-7月6日</div>
+                        </div>
+                    </div>
+                    <ul class="space-y-2 text-sm text-gray-600 flex-1">
+                        <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">●</span>指导学生系统操作</li>
+                        <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">●</span>每日关注报名数据</li>
+                        <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">●</span>解答学生疑问</li>
+                        <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">●</span>提醒逾期不予受理</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card-hover bg-white rounded-xl border-t-4 border-green-500 shadow-sm flex flex-col fade-in-up delay-2">
+                <div class="p-5 flex-1 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center text-white font-bold text-lg">03</div>
+                        <div>
+                            <h3 class="font-bold text-base">后续跟进</h3>
+                            <div class="text-xs text-gray-400">7月7日-开课</div>
+                        </div>
+                    </div>
+                    <ul class="space-y-2 text-sm text-gray-600 flex-1">
+                        <li class="flex items-start gap-2"><span class="text-green-500 mt-1">●</span>关注教务处调整通知</li>
+                        <li class="flex items-start gap-2"><span class="text-green-500 mt-1">●</span>做好未达开班专业沟通</li>
+                        <li class="flex items-start gap-2"><span class="text-green-500 mt-1">●</span>协助学生专业调剂</li>
+                        <li class="flex items-start gap-2"><span class="text-green-500 mt-1">●</span>确认最终开课名单</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- 附件政策 -->
+        <div class="bg-ikb-light rounded-xl p-4 border border-ikb/20 fade-in-up delay-3">
+            <h3 class="font-bold text-sm text-ikb mb-3">政策文件体系</h3>
+            <div class="grid grid-cols-3 gap-3">
+                <div class="bg-white rounded-lg p-3 border border-ikb/20">
+                    <div class="text-xs text-ikb font-bold mb-1">顶层文件</div>
+                    <div class="text-sm font-bold text-gray-900">《辅修制暂行条例》</div>
+                    <div class="text-xs text-gray-500 mt-1">制度总纲</div>
+                </div>
+                <div class="bg-white rounded-lg p-3 border border-blue-200">
+                    <div class="text-xs text-blue-500 font-bold mb-1">执行文件</div>
+                    <div class="text-sm font-bold text-gray-900">贤达教通〔2026〕82号</div>
+                    <div class="text-xs text-gray-500 mt-1">本次招生安排</div>
+                </div>
+                <div class="bg-white rounded-lg p-3 border border-green-200">
+                    <div class="text-xs text-green-500 font-bold mb-1">配套文件</div>
+                    <div class="text-sm font-bold text-gray-900">管理办法 + 培养方案</div>
+                    <div class="text-xs text-gray-500 mt-1">2个附件</div>
+                </div>
+            </div>
+        </div>
+        <!-- 感谢语 -->
+        <div class="text-center fade-in-up delay-4">
+            <h2 class="text-2xl font-black text-gray-900 mb-2">感谢聆听</h2>
+            <p class="text-gray-500 text-sm">请各位领导审阅并提出宝贵意见</p>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<!-- 导航圆点 -->
+<div class="nav-dots">
+    <div class="nav-dot active" data-slide="0"></div>
+    <div class="nav-dot" data-slide="1"></div>
+    <div class="nav-dot" data-slide="2"></div>
+    <div class="nav-dot" data-slide="3"></div>
+    <div class="nav-dot" data-slide="4"></div>
+    <div class="nav-dot" data-slide="5"></div>
+    <div class="nav-dot" data-slide="6"></div>
+    <div class="nav-dot" data-slide="7"></div>
+</div>
+
+<!-- 翻页提示 -->
+<div class="arrow-hint">← → 键盘翻页</div>
+
+<script>
+// 幻灯片控制
+let currentSlide = 0;
+const slides = document.querySelectorAll('.slide');
+const dots = document.querySelectorAll('.nav-dot');
+const totalSlides = slides.length;
+
+function goToSlide(index) {
+    if (index < 0 || index >= totalSlides) return;
+
+    slides.forEach((slide, i) => {
+        slide.classList.remove('active', 'prev');
+        if (i === index) {
+            slide.classList.add('active');
+        } else if (i < index) {
+            slide.classList.add('prev');
+        }
+    });
+
+    dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+    });
+
+    currentSlide = index;
+    document.getElementById('currentPage').textContent = index + 1;
+}
+
+// 键盘控制
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        goToSlide(currentSlide + 1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') {
+        e.preventDefault();
+        goToSlide(currentSlide - 1);
+    } else if (e.key === 'Home') {
+        e.preventDefault();
+        goToSlide(0);
+    } else if (e.key === 'End') {
+        e.preventDefault();
+        goToSlide(totalSlides - 1);
+    }
+});
+
+// 鼠标滚轮翻页（可选）
+let wheelTimeout;
+document.addEventListener('wheel', (e) => {
+    clearTimeout(wheelTimeout);
+    wheelTimeout = setTimeout(() => {
+        if (e.deltaY > 50) {
+            goToSlide(currentSlide + 1);
+        } else if (e.deltaY < -50) {
+            goToSlide(currentSlide - 1);
+        }
+    }, 100);
+});
+
+// 圆点导航
+dots.forEach((dot, index) => {
+    dot.addEventListener('click', () => goToSlide(index));
+});
+
+// 触摸滑动支持
+let touchStartX = 0;
+document.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+});
+document.addEventListener('touchend', (e) => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) {
+        if (diff > 0) goToSlide(currentSlide + 1);
+        else goToSlide(currentSlide - 1);
+    }
+});
+
+// 倒计时
+function updateCountdown() {
+    const endDate = new Date('2026-07-06T12:00:00');
+    const now = new Date();
+    const diff = endDate - now;
+    if (diff > 0) {
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const el = document.getElementById('countdown');
+        if (el) el.textContent = days + '天' + hours + '小时';
+    } else {
+        const el = document.getElementById('countdown');
+        if (el) el.textContent = '已截止';
+    }
+}
+updateCountdown();
+setInterval(updateCountdown, 3600000);
+
+// 初始化
+console.log('HTML PPT loaded. Use arrow keys to navigate.');
+</script>
+
+</body>
+</html>
